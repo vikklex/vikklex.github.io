@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Elf and Trolls</title>
+  <meta name="description" content="Elf and Trolls game">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<header>
+  <div class="mainmenu">
+    <ul class="mainmenu__list">
+      <li class="mainmenu__link_1"><a href="#game">Game 🐒</a></li>
+      <li class="mainmenu__link_2"><a href="#results">Results 📔</a></li>
+    </ul>
+</header>
+    </div>
+<main id="main">
+  <div id="results">
+    <ol id="table"></ol>
+  </div>
+</main>
+  <script src="js/router.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/resources.js"></script>
+  <script src="js/sprite.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    let game = new Game(saveResult);
+
+    const onRenderGame = () => { // 
+      removeAll(); // удаляем каждый раз содержимое game для перерисовки
+
+      let main = document.getElementById("main");
+
+      let game = document.createElement("div"); // а затем в этом блоке снова создаем элементы, содержимое которых удалили
+
+      game.setAttribute("id", "game");
+
+      let area = document.createElement("canvas");
+
+      area.setAttribute("id", "area");
+
+      game.appendChild(area);
+      main.appendChild(game);
+    }
+
+    const onStartGame = () => {
+      game.start(); //=> contoller.start() => model.start()
+    };
+
+    const onStopGame = () => {
+      game.stop(); //=> contoller.stop() => resourses.remove()
+    };
+
+    const onRenderResults = () => { //перерисовка страницы результаты
+      removeAll();
+
+      let main = document.getElementById("main");
+
+      let results = document.createElement("div");
+
+      results.setAttribute("id", "results");
+
+      let ol = document.createElement("ol");
+
+      ol.setAttribute("id", "table");
+
+      results.appendChild(ol);
+      main.appendChild(results);
+    }
+
+    const onStartResults = () => {
+      showResults();
+    };
+
+    const onStopResults = () => {
+    };
+
+    const removeAll = () => {
+      let oldGame = document.getElementById("game");
+
+      if (oldGame) { // удалить запущенную игру
+        oldGame.remove();
+      } 
+
+      let oldResults = document.getElementById("results");
+
+      if (oldResults) {
+        oldResults.remove(); // визуально удвлить реультаты и перейти к игре
+      }
+    }
+
+    let router = new Router();
+
+    window.onpopstate = (event) => { // события при смене истории внутри одного документа, то есть при перещелкивании страниц
+      router.setPath(location.href);
+    };
+
+    router.handle("#game", onRenderGame, onStartGame, onStopGame, true);
+    router.handle("#results", onRenderResults, onStartResults, onStopResults);
+  </script>
+</body>
+
+</html>
